@@ -2,7 +2,7 @@ const faunadb = require('faunadb')
 const { userById } = require('./commonQueries')
 const q = faunadb.query
 
-module.exports = client => (id, payload) =>
-  client
+module.exports = db => (id, payload) =>
+  db
     .query(q.Update(userById(id), { data: payload }))
     .then(({ data }) => ({ ...data, id }))

@@ -42,6 +42,20 @@ test('creates a user', async () => {
   newUserId = result.id
 })
 
+test('updates a password', async () => {
+  expect(newUserId).toBeTruthy()
+  const result = await FaunaAuth.changePassword(newUserId, 'newPassword')
+
+  expect(result).toEqual({
+    id: expect.any(String),
+    email: EMAIL,
+    hash: expect.any(String),
+    some: 'data',
+  })
+
+  expect(await bcrypt.compare('newPassword', result.hash)).toBe(true)
+})
+
 test('Deletes a user', async () => {
   expect(newUserId).toBeTruthy()
 

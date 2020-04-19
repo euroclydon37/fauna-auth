@@ -8,6 +8,7 @@ const tokenCreator = require('./src/createTokens')
 const tokenRefresher = require('./src/refreshToken')
 const tokenDeleter = require('./src/deleteRefreshToken')
 const userGetterByToken = require('./src/verifyAndGetUser')
+const passwordChanger = require('./src/changePassword')
 
 module.exports = ({ dbSecret, accessSecret, refreshSecret, tokenDuration }) => {
   const db = new faunadb.Client({ secret: dbSecret })
@@ -18,6 +19,7 @@ module.exports = ({ dbSecret, accessSecret, refreshSecret, tokenDuration }) => {
     get: userGetter(db),
     update: userUpdater(db),
     authenticate: authenticator(db),
+    changePassword: passwordChanger(db),
     createTokens: tokenCreator(db, accessSecret, refreshSecret, tokenDuration),
     refreshToken: tokenRefresher(db, accessSecret, refreshSecret),
     deleteRefreshToken: tokenDeleter(db),
