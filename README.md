@@ -20,8 +20,9 @@ There are a few preliminary steps.
 2. Create a database
 3. Inside the database you just made, create two collections: `users` and `tokens`.
 4. Create a new key for your database.
-5. Create a secret (a long, preferably random string) to use for signing jwt access tokens.
-6. Create another one for signing jwt refresh tokens.
+5. Create two secrets (long, preferably random strings) for signing jwt tokens.
+    1. One for access tokens.
+    2. Another for refresh tokens.
 
 _Note: Please do not commit your key to github. All the examples below will be using environment variables._
 
