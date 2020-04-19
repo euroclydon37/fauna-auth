@@ -12,7 +12,6 @@ module.exports = (
   expiresIn = DEFAULT_EXPIRATION
 ) => async ({ id }) => {
   if (!id) throw new Error('id must be present')
-  // if (!email) throw new Error('email must be present')
 
   const accessToken = jwt.sign({ id }, accessTokenSecret, { expiresIn })
   let refreshToken

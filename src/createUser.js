@@ -7,33 +7,33 @@ const { COLLECTIONS } = require('../constants/db')
 
 const q = faunadb.query
 
-const createQuery = client => (email, hash, data) =>
+const createQuery = client => (username, hash, data) =>
   client.query(
     q.Create(q.Collection(COLLECTIONS.USERS), {
-      data: { email, hash, ...data },
+      data: { username, hash, ...data },
     })
   )
 
-const existsQuery = client => email =>
-  client.query(q.Exists(q.Match(q.Index('email'), email)))
+const existsQuery = client => username =>
+  client.query(q.Exists(q.Match(q.Index('username'), username)))
 
 const withIdQuery = client => ({ ref, data }) =>
   client.query(q.Select('id', ref)).then(id => ({ ...data, id }))
 
-module.exports = client => async (email, password, extraData) => {
+module.exports = client => async (username, password, extraData) => {
   if (!client) return errAsync(errorMsgs.noDB)
 
   const create = createQuery(client)
   const exists = existsQuery(client)
   const withId = withIdQuery(client)
 
-  if (await exists(email)) {
+  if (await exists(username)) {
     return errAsync(errorMsgs.userExists)
   }
 
   const hash = await bcrypt.hash(password, SALT_ROUNDS)
 
-  const result = await create(email, hash, extraData)
+  const result = await create(username, hash, extraData)
 
   return withId(result)
 }

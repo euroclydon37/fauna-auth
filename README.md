@@ -20,7 +20,7 @@ There are a few preliminary steps.
 2. Create a database
 3. Inside the database you just made, create two collections: `users` and `tokens`.
 4. Create two indexes by the following keys.
-    1. "data.email"
+    1. "data.username"
     2. "data.refreshTokens"
 4. Create a new key for your database.
 5. Create two secrets (long, preferably random strings) for signing jwt tokens.
@@ -46,7 +46,7 @@ And finally, you can manage and authenticate users.
 
 ```js
 // Create a user
-const newUser = await FaunaAuth.create('email', 'password', { some: 'data' })
+const newUser = await FaunaAuth.create('username', 'password', { some: 'data' })
 
 // Update a user
 const updatedUser = await FaunaAuth.update(existingUser.id, { more: 'data' })
@@ -58,7 +58,7 @@ const updatedUser = await FaunaAuth.changePassword(existingUser.id, 'newPassword
 await FaunaAuth.delete(updatedUser.id)
 
 // Authenticate a user
-const user = await FaunaAuth.authenticate('email', 'password')
+const user = await FaunaAuth.authenticate('username', 'password')
 
 // Create tokens
 const { accessToken, refreshToken } = await FaunaAuth.createTokens(user)
@@ -72,3 +72,6 @@ const { accessToken } = await FaunaAuth.refreshToken(refreshToken)
 // Delete refresh tokens when the user manually logs out
 await FaunaAuth.deleteRefreshToken(refreshToken)
 ```
+
+## Todo
+* Social Authentication

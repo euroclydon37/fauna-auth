@@ -8,10 +8,10 @@ const {
   DB_SECRET,
   ACCESS_SECRET,
   REFRESH_SECRET,
-  EMAIL,
+  USERNAME,
   PASSWORD,
   EXISTING_USER_ID,
-  EXISTING_USER_EMAIL,
+  EXISTING_USER_USERNAME,
   EXISTING_USER_PASSWORD,
 } = process.env
 
@@ -28,11 +28,11 @@ const FaunaAuth = initAuth({
 })
 
 test('creates a user', async () => {
-  const result = await FaunaAuth.create(EMAIL, PASSWORD, { some: 'data' })
+  const result = await FaunaAuth.create(USERNAME, PASSWORD, { some: 'data' })
 
   expect(result).toEqual({
     id: expect.any(String),
-    email: EMAIL,
+    username: USERNAME,
     hash: expect.any(String),
     some: 'data',
   })
@@ -48,7 +48,7 @@ test('updates a password', async () => {
 
   expect(result).toEqual({
     id: expect.any(String),
-    email: EMAIL,
+    username: USERNAME,
     hash: expect.any(String),
     some: 'data',
   })
@@ -61,14 +61,14 @@ test('Deletes a user', async () => {
 
   const result = await FaunaAuth.delete(newUserId)
 
-  expect(result.data.email).toEqual(EMAIL)
+  expect(result.data.username).toEqual(USERNAME)
 })
 
 test('gets a user', async () => {
   const result = await FaunaAuth.get(EXISTING_USER_ID)
   expect(result).toEqual({
     id: EXISTING_USER_ID,
-    email: 'existing@test.com',
+    username: 'existing@test.com',
     hash: expect.any(String),
     randomNumber: expect.any(Number),
   })
@@ -92,13 +92,13 @@ test('updates a user', async () => {
 
 test('authenticate', async () => {
   const result = await FaunaAuth.authenticate(
-    EXISTING_USER_EMAIL,
+    EXISTING_USER_USERNAME,
     EXISTING_USER_PASSWORD
   )
 
   expect(result).toEqual({
     id: expect.any(String),
-    email: EXISTING_USER_EMAIL,
+    username: EXISTING_USER_USERNAME,
     hash: expect.any(String),
     randomNumber: expect.any(Number),
   })
@@ -114,7 +114,7 @@ test('createTokens', async () => {
     refreshToken: expect.any(String),
   })
 
-  jwt.verify(result.accessToken, ACCESS_SECRET, (err, { id, email }) => {
+  jwt.verify(result.accessToken, ACCESS_SECRET, (err, { id }) => {
     expect(id).toEqual(EXISTING_USER_ID)
   })
 
