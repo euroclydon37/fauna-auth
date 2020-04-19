@@ -1,0 +1,2 @@
+exports.SALT_ROUNDS = 10
+exports.DEFAULT_EXPIRATION = 1000 * 60 * 15

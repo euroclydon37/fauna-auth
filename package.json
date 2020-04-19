@@ -1,0 +1,34 @@
+{
+  "name": "fauna-auth",
+  "version": "1.0.0",
+  "description": "Library for user management backed by FaunaDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/euroclydon37/fauna-auth.git"
+  },
+  "keywords": [
+    "users",
+    "management",
+    "db"
+  ],
+  "author": "Jeremy Dunn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/euroclydon37/fauna-auth/issues"
+  },
+  "homepage": "https://github.com/euroclydon37/fauna-auth#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "faunadb": "^2.9.4",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.23",
+    "dotenv": "^8.2.0",
+    "jest": "^24.9.0"
+  }
+}
