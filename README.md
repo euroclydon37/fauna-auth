@@ -19,6 +19,9 @@ There are a few preliminary steps.
 1. Create an account at [fauna.com](https://fauna.com)
 2. Create a database
 3. Inside the database you just made, create two collections: `users` and `tokens`.
+4. Create two indexes by the following keys.
+    1. "data.email"
+    2. "data.refreshTokens"
 4. Create a new key for your database.
 5. Create two secrets (long, preferably random strings) for signing jwt tokens.
     1. One for access tokens.
