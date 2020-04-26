@@ -1,8 +1,10 @@
 require('dotenv').config()
-
+const faunadb = require('faunadb')
 const bcrypt = require('bcrypt')
 const initAuth = require('./index')
 const jwt = require('jsonwebtoken')
+
+const q = faunadb.query
 
 const {
   DB_SECRET,
@@ -26,6 +28,8 @@ const FaunaAuth = initAuth({
   refreshSecret: REFRESH_SECRET,
   tokenDuration: 1000 * 5,
 })
+
+const delay = ms => new Promise(res => setTimeout(res, ms))
 
 test('creates a user', async () => {
   const result = await FaunaAuth.create(USERNAME, PASSWORD, { some: 'data' })
@@ -133,14 +137,26 @@ test('verify', async () => {
 
 test('refreshToken - valid refresh token', async () => {
   expect(refreshToken).toBeTruthy()
+  await delay(100) // to ensure the jwt will be different
 
   const result = await FaunaAuth.refreshToken(refreshToken)
 
-  expect(result).toEqual({ accessToken: expect.any(String) })
+  expect(result).toEqual({
+    accessToken: expect.any(String),
+    refreshToken: expect.any(String),
+  })
+
+  const exists = await new faunadb.Client({ secret: DB_SECRET })
+    .query(q.Exists(q.Match(q.Index('refreshTokens'), refreshToken)))
+    .catch(() => false)
+
+  expect(exists).toBe(false)
 
   jwt.verify(result.accessToken, ACCESS_SECRET, (err, { id }) => {
     expect(id).toEqual(EXISTING_USER_ID)
   })
+
+  refreshToken = result.refreshToken
 })
 
 test('refreshToken - invalid refresh token', async () => {
@@ -155,4 +171,14 @@ test('deleteRefreshToken', async () => {
   FaunaAuth.refreshToken(refreshToken).catch(err => {
     expect(err.message).toEqual('invalid token')
   })
+})
+
+test('deauthenticate', async () => {
+  expect(existingUser).toBeTruthy()
+
+  const { refreshToken } = await FaunaAuth.createTokens(existingUser)
+
+  const result = await FaunaAuth.deauthenticate(existingUser)
+
+  expect(result.data[0].data.refreshToken).toEqual(refreshToken)
 })

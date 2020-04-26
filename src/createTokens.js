@@ -10,24 +10,18 @@ module.exports = (
   accessTokenSecret,
   refreshTokenSecret,
   expiresIn = DEFAULT_EXPIRATION
-) => async ({ id }) => {
-  if (!id) throw new Error('id must be present')
+) => async user => {
+  if (!user.id) throw new Error('id must be present')
 
-  const accessToken = jwt.sign({ id }, accessTokenSecret, { expiresIn })
-  let refreshToken
-
-  while (!refreshToken) {
-    const token = jwt.sign({ id }, refreshTokenSecret)
-
-    const exists = await db
-      .query(q.Exists(q.Match(q.Index('refreshTokens'), token)))
-      .catch(() => false)
-
-    refreshToken = exists ? null : token
-  }
+  const accessToken = jwt.sign({ id: user.id }, accessTokenSecret, {
+    expiresIn,
+  })
+  const refreshToken = jwt.sign({ id: user.id }, refreshTokenSecret)
 
   await db.query(
-    q.Create(q.Collection(COLLECTIONS.TOKENS), { data: { refreshToken } })
+    q.Create(q.Collection(COLLECTIONS.TOKENS), {
+      data: { userId: user.id, refreshToken },
+    })
   )
 
   return { accessToken, refreshToken }
