@@ -1,6 +1,8 @@
 const faunadb = require('faunadb')
 const jwt = require('jsonwebtoken')
 const verifyToken = require('./verifyToken')
+const deleteRefreshToken = require('./deleteRefreshToken')
+const createTokens = require('./createTokens')
 
 const q = faunadb.query
 
@@ -11,7 +13,8 @@ const unauthorized = () => {
 module.exports = (
   db,
   accessTokenSecret,
-  refreshTokenSecret
+  refreshTokenSecret,
+  expiresIn = DEFAULT_EXPIRATION
 ) => async refreshToken => {
   const tokenData = await verifyToken(refreshToken, refreshTokenSecret)
 
@@ -23,7 +26,12 @@ module.exports = (
 
   if (!exists) unauthorized()
 
-  return {
-    accessToken: jwt.sign(tokenData, accessTokenSecret),
-  }
+  deleteRefreshToken(db)(refreshToken)
+
+  return createTokens(
+    db,
+    accessTokenSecret,
+    refreshTokenSecret,
+    expiresIn
+  )(tokenData)
 }
