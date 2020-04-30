@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const verifyToken = require('./verifyToken')
 const deleteRefreshToken = require('./deleteRefreshToken')
 const createTokens = require('./createTokens')
+const { DEFAULT_EXPIRATION } = require('../constants/jwt')
 
 const q = faunadb.query
 
