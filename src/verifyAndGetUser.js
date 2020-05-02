@@ -1,6 +1,7 @@
 const faunadb = require('faunadb')
 const verifyToken = require('./verifyToken')
 const getUser = require('./getUser')
+const { withoutHash } = require('./utils/withoutHash')
 
 const q = faunadb.query
 
@@ -13,5 +14,5 @@ module.exports = (db, tokenSecret) => async accessToken => {
 
   if (!tokenData) unauthorized()
 
-  return getUser(db)(tokenData.id)
+  return getUser(db)(tokenData.id).then(user => withoutHash(user))
 }

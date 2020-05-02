@@ -1,5 +1,6 @@
 const faunadb = require('faunadb')
 const bcrypt = require('bcrypt')
+const { withoutHash } = require('./utils/withoutHash')
 const q = faunadb.query
 
 const getByUsernameQuery = client => username =>
@@ -18,5 +19,5 @@ module.exports = client => async (username, password) => {
 
   const isValid = await bcrypt.compare(password, user.hash)
 
-  return isValid ? user : Promise.reject('invalid credentials')
+  return isValid ? withoutHash(user) : Promise.reject('invalid credentials')
 }

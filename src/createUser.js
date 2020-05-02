@@ -4,6 +4,7 @@ const errAsync = require('./errorAsync')
 const errorMsgs = require('../constants/errorMessages')
 const { SALT_ROUNDS } = require('../constants/jwt')
 const { COLLECTIONS } = require('../constants/db')
+const { withoutHash } = require('./utils/withoutHash')
 
 const q = faunadb.query
 
@@ -35,5 +36,5 @@ module.exports = client => async (username, password, extraData) => {
 
   const result = await create(username, hash, extraData)
 
-  return withId(result)
+  return withId(result).then(data => withoutHash(data))
 }
