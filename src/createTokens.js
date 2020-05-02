@@ -24,5 +24,5 @@ module.exports = (
     })
   )
 
-  return { accessToken, refreshToken }
+  return { accessToken, refreshToken, expiration: Date.now() + expiresIn }
 }

@@ -108,6 +108,7 @@ test('createTokens', async () => {
   expect(result).toEqual({
     accessToken: expect.any(String),
     refreshToken: expect.any(String),
+    expiration: expect.any(Number),
   })
 
   jwt.verify(result.accessToken, ACCESS_SECRET, (err, { id }) => {
@@ -136,6 +137,7 @@ test('refreshToken - valid refresh token', async () => {
   expect(result).toEqual({
     accessToken: expect.any(String),
     refreshToken: expect.any(String),
+    expiration: expect.any(Number),
   })
 
   const exists = await new faunadb.Client({ secret: DB_SECRET })

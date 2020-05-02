@@ -1,6 +1,1 @@
-const log = value => {
-  console.log(value)
-  return value
-}
-
-exports.withoutHash = ({ hash, ...rest }) => log(rest)
+exports.withoutHash = ({ hash, ...rest }) => rest
