@@ -27,7 +27,7 @@ module.exports = (
 
   if (!exists) unauthorized()
 
-  deleteRefreshToken(db)(refreshToken)
+  await deleteRefreshToken(db)(refreshToken)
 
   return createTokens(
     db,

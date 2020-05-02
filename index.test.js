@@ -37,11 +37,8 @@ test('creates a user', async () => {
   expect(result).toEqual({
     id: expect.any(String),
     username: USERNAME,
-    hash: expect.any(String),
     some: 'data',
   })
-
-  expect(await bcrypt.compare(PASSWORD, result.hash)).toBe(true)
 
   newUserId = result.id
 })
@@ -53,11 +50,8 @@ test('updates a password', async () => {
   expect(result).toEqual({
     id: expect.any(String),
     username: USERNAME,
-    hash: expect.any(String),
     some: 'data',
   })
-
-  expect(await bcrypt.compare('newPassword', result.hash)).toBe(true)
 })
 
 test('Deletes a user', async () => {
@@ -73,7 +67,6 @@ test('gets a user', async () => {
   expect(result).toEqual({
     id: EXISTING_USER_ID,
     username: 'existing@test.com',
-    hash: expect.any(String),
     randomNumber: expect.any(Number),
   })
 
@@ -103,7 +96,6 @@ test('authenticate', async () => {
   expect(result).toEqual({
     id: expect.any(String),
     username: EXISTING_USER_USERNAME,
-    hash: expect.any(String),
     randomNumber: expect.any(Number),
   })
 })
