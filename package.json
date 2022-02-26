@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/euroclydon37/fauna-auth#readme",
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "faunadb": "^2.9.4",
     "jsonwebtoken": "^8.5.1"
   },
