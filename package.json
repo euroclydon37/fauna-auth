@@ -24,7 +24,7 @@
   "dependencies": {
     "bcrypt": "^3.0.6",
     "faunadb": "^2.9.4",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",
